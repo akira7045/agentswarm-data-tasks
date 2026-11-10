@@ -19,10 +19,15 @@ library. No wall clock, network, locale data or fixture access.
   - `2026-11-13T12:00[:SS][Z|±HH:MM]`
     - Seconds optional; `Z` or a numeric offset is required.
     - Offset hours 00–23 and minutes 00–59 are range-checked before building the
-      offset; the value is normalised to UTC.
+      offset; the value is normalised to UTC. If that UTC instant is not
+      representable (e.g. `0001-01-01T00:00+00:01` or `9999-12-31T23:59-00:01`),
+      the overflow is caught and `None` is returned.
     - Rejects naive dates, fractional seconds and trailing text.
   - `in N days`
     - `N` is a nonnegative decimal integer, max 3650 (leading zeros allowed).
+      Leading zeros are stripped before conversion and the digit run is bounded,
+      so very long zero-padded or out-of-range literals return `None` instead of
+      tripping Python's integer-string digit limit.
     - Uses `timedelta(days=N)`, preserving the UTC hour/minute/second.
   - `end of week`
     - Sunday 23:59:59 of the current UTC Monday–Sunday week. On Sunday this is
