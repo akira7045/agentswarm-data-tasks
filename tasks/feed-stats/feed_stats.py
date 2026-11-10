@@ -44,8 +44,12 @@ def bucket_for(bounty):
     if amount is not None:
         if isinstance(amount, bool) or not isinstance(amount, (int, float)):
             raise FeedError("bounty.amountUsd must be a number")
-        if not math.isfinite(amount) or amount < 0:
-            raise FeedError("bounty.amountUsd must be finite and nonnegative")
+        if isinstance(amount, int):
+            if amount < 0:
+                raise FeedError("bounty.amountUsd must be finite and nonnegative")
+        else:
+            if not math.isfinite(amount) or amount < 0:
+                raise FeedError("bounty.amountUsd must be finite and nonnegative")
         if amount == 0:
             if isinstance(reward, str) and reward.strip():
                 return "text"
