@@ -1,6 +1,9 @@
 def _require_dict(obj):
     if type(obj) is not dict:
         raise TypeError("expected exact dict")
+
+
+def _require_size(obj):
     if len(obj) > 1000:
         raise ValueError("dict has more than 1000 entries")
 
@@ -26,6 +29,8 @@ def merge_counters(left, right):
         _require_type(k, v)
     for k, v in right.items():
         _require_type(k, v)
+    _require_size(left)
+    _require_size(right)
     for k, v in left.items():
         _require_bounds(k, v)
     for k, v in right.items():
