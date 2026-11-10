@@ -1,6 +1,9 @@
 def chunk_ranges(length, size):
-    if not isinstance(length, int) or not isinstance(size, int):
+    if type(length) is not int or type(size) is not int:
         raise TypeError('exact integers required')
     if length < 0 or size < 1:
         raise ValueError('invalid bounds')
-    return [(start, start + size) for start in range(0, max(1, length), size)]
+    return [
+        (start, min(start + size, length))
+        for start in range(0, length, size)
+    ]
