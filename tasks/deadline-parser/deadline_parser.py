@@ -85,11 +85,18 @@ def _parse_iso(match, now):
         moment = datetime(year, month, day, hour, minute, second, tzinfo=tz)
     except ValueError:
         return None
-    return _format_utc(moment.astimezone(timezone.utc))
+    try:
+        utc_moment = moment.astimezone(timezone.utc)
+    except (OverflowError, ValueError):
+        return None
+    return _format_utc(utc_moment)
 
 
 def _parse_in_days(match, now):
-    days = int(match.group(1))
+    digits = match.group(1).lstrip('0') or '0'
+    if len(digits) > 4:
+        return None
+    days = int(digits)
     if days > 3650:
         return None
     try:
