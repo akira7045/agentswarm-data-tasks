@@ -6,11 +6,11 @@ def paginate_items(items, offset, limit):
     if type(limit) is not int:
         raise TypeError("limit must be an int")
 
-    if len(items) > 1000:
-        raise ValueError("too many items")
     for value in items:
         if type(value) is not str:
             raise TypeError("items must contain str")
+    if len(items) > 1000:
+        raise ValueError("too many items")
     for value in items:
         if len(value) > 64:
             raise ValueError("item too long")
