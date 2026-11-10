@@ -107,9 +107,12 @@ def _parse_in_days(match, now):
 
 
 def _parse_end_of_week(now):
-    sunday = now.date() + timedelta(days=(6 - now.weekday()))
-    moment = datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59,
-                      tzinfo=timezone.utc)
+    try:
+        sunday = now.date() + timedelta(days=(6 - now.weekday()))
+        moment = datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59,
+                          tzinfo=timezone.utc)
+    except (OverflowError, ValueError):
+        return None
     return _format_utc(moment)
 
 
